@@ -1,0 +1,32 @@
+---
+- name: Creates directory
+  become: yes
+  file:
+    path: /var/web
+    state: directory
+
+- name: copy backend files
+  become: yes
+  copy:
+    src: ../../../../../backend.tar.gz
+    dest: /var/web
+    backup: yes
+
+- name: extract backend files
+  become: yes
+  shell: |
+    cd /var/web
+    tar -xf backend.tar.gz
+
+- name: install dependencies and build
+  become: yes
+  shell: |
+    cd /var/web
+    sudo npm i
+    sudo npm run build
+
+- name: start server
+  become: yes
+  shell: | 
+    cd /var/web
+    pm2 start npm -- run start

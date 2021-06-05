@@ -1,0 +1,2 @@
+lint:
+	hadolint Dockerfile
